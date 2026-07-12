@@ -1,15 +1,63 @@
-# TEC Domain App Template — Claude Code Instructions
+# TEC NX — Claude Code Instructions
 
-## What This Repo Is
+> ⚡ **SESSION START:** اقرأ `knowledge-base/C-02___CURRENT_STATE_.md` + **`C-112` (NX charter,
+> repurposed by `ADR-010`)** من `yasira82/tec-knowledge-base` (branch: `main`).
 
-The **golden starter template** for a new app in the TEC Federated Platform.
-It ships a correct, Portal-ready skeleton: Hub SSO, dual-mode Pi payments,
-CSRF, legal pages, and CI policy guards. Clone it, run the "New app setup"
-checklist below, and you have a compliant app — no missing pieces.
+## What This App Is
 
-**Reference of record:** `yasira82/tec-knowledge-base` — especially
-`C-12_Dual_Mode_Payment.md` (payment + anti-regression) and
-`audits/PORTAL_SUBMISSION_RUNBOOK_*.md`.
+**The Opportunity Exchange** for the Pi economy (C-112, **repurposed by ADR-010**).
+NX answers one question:
+
+```
+"What is the right opportunity for me now?"
+```
+
+NX connects people to opportunities — **jobs · partnerships · grants · hackathons ·
+investments · co-founders · mentorship** — the Pi economy's unified opportunity
+marketplace (think *LinkedIn Opportunities + AngelList + Pi Jobs*, but native to Pi).
+
+> **ADR-010 (July 2026):** NX was **repurposed from Cyber Security → Opportunity
+> Exchange**. Its old security role moved to **System (C-110) as a "Security Center"**
+> (security *alerts* → Alert/C-111; *verification/trust* → Zone/C-120). NX is **not**
+> a security app. See C-64 ADR-010.
+
+Built from `tec-template-base` (Next.js 15 frontend).
+
+**Current Phase: NX V0/V1 — Opportunity board (read-only).** Identity / domain / slug /
+legal + a themed board (search · kind filter · trust-first ranking over a curated
+**read-only sample**) + an `/opportunity/[id]` detail page + **NX Pro** (the Pi Portal
+"Process a Transaction" gate). A real posting index + trust-weighted matching (Life
+intent + Connection graph) is Phase 1+. Not yet deployed.
+
+---
+
+## Pi App Identity
+
+| Field | Value |
+|-------|-------|
+| **App** | TEC NX |
+| **Domain** | `https://nx.tecosystem.app` |
+| **Pi App ID** | ⏳ TBD — register at Pi Developer Portal · then Vercel `NEXT_PUBLIC_PI_APP_ID` |
+| **APP_SOURCE slug** | `nx` (payment-service resolves `PI_API_KEY_NX`) |
+| **PI_SANDBOX** | `false` (Mainnet) |
+
+---
+
+## NX-Specific Rules (C-112 / ADR-010)
+
+### The boundary — NX matches + presents; it does NOT execute
+NX **OWNS**: the opportunity posting index, matching + trust-weighted ranking, kind
+browsing, and the opportunity board. NX does **NOT OWN**:
+- **Capital movement** → `tec-payment-service` + FundX (C-113). Investments shown are indicative/educational only; NX never moves money.
+- **Party verification** → Zone (C-120) / `tec-kyc-service`. NX presents the "Verified" badge, never mints it.
+- **The relationship graph** → Connection (C-107). **Security** → System Security Center (ADR-010).
+
+### Isolation (P6)
+Posting/applying derives identity from the `tec_user` session cookie server-side —
+**never** a query param or body. Public board info only. No session → fail closed.
+
+**Reference of record:** `yasira82/tec-knowledge-base` — `C-112` (charter, repurposed) +
+`C-64` **ADR-010** (the repurpose decision) + `C-12_Dual_Mode_Payment.md` + `C-123`.
 
 ---
 
