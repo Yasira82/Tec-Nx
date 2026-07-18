@@ -6,10 +6,14 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { TEC_COLORS } from '@yasser172/tec-ui';
 import { getOpportunity, OPPORTUNITIES, KIND_META } from '@/lib/nx/opportunities';
+import { resolveOpportunity } from '@/lib/nx/server';
 
+// Pre-render the curated sample handles; allow live-only backend handles to render
+// on demand (the NX opportunity module is the index of record — ADR-010).
 export function generateStaticParams() {
   return OPPORTUNITIES.map((o) => ({ id: o.id }));
 }
+export const dynamicParams = true;
 
 export async function generateMetadata(
   { params }: { params: Promise<{ id: string }> },
@@ -26,7 +30,9 @@ export default async function OpportunityPage(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const o = getOpportunity(id);
+  // Resolve from the live NX backend (opportunity module); fall back to the curated
+  // sample so the page never 500s (the board is always available — ADR-010).
+  const { opportunity: o } = await resolveOpportunity(id);
 
   const wrap: React.CSSProperties = {
     minHeight: '100vh', background: TEC_COLORS.bg, color: TEC_COLORS.text,
