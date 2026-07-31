@@ -3,36 +3,20 @@
 // (→ payment-service + FundX), verifies parties (→ Zone/KYC), or owns the graph
 // (→ Connection). Investments shown are indicative/educational only.
 import Link from 'next/link';
-import type { Metadata } from 'next';
 import { TEC_COLORS } from '@yasser172/tec-ui';
-import { getOpportunity, OPPORTUNITIES, KIND_META } from '@/lib/nx/opportunities';
+import { KIND_META } from '@/lib/nx/opportunities';
 import { resolveOpportunity } from '@/lib/nx/server';
 
-// Pre-render the curated sample handles; allow live-only backend handles to render
-// on demand (the NX opportunity module is the index of record — ADR-010).
-export function generateStaticParams() {
-  return OPPORTUNITIES.map((o) => ({ id: o.id }));
-}
-export const dynamicParams = true;
-
-export async function generateMetadata(
-  { params }: { params: Promise<{ id: string }> },
-): Promise<Metadata> {
-  const { id } = await params;
-  const o = getOpportunity(id);
-  return {
-    title:       o ? `${o.title} — TEC NX` : 'TEC NX — Opportunity',
-    description: o ? `${o.title}: ${o.summary}` : 'An opportunity on TEC NX (C-112).',
-  };
-}
+// Rendered dynamically from the live NX backend (opportunity module) — real data
+// end-to-end (C-135 §4): a live 404 is "not found"; an unreachable backend is an
+// honest "couldn't load". Never a fabricated sample.
+export const dynamic = 'force-dynamic';
 
 export default async function OpportunityPage(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  // Resolve from the live NX backend (opportunity module); fall back to the curated
-  // sample so the page never 500s (the board is always available — ADR-010).
-  const { opportunity: o } = await resolveOpportunity(id);
+  const { opportunity: o, source } = await resolveOpportunity(id);
 
   const wrap: React.CSSProperties = {
     minHeight: '100vh', background: TEC_COLORS.bg, color: TEC_COLORS.text,
@@ -41,12 +25,19 @@ export default async function OpportunityPage(
   const inner: React.CSSProperties = { maxWidth: 680, margin: '0 auto' };
 
   if (!o) {
+    const unavailable = source === 'unavailable';
     return (
       <main style={wrap}>
         <div style={inner}>
           <Link href="/app" style={{ fontSize: 13, color: TEC_COLORS.gold, textDecoration: 'none' }}>← Opportunities</Link>
-          <h1 style={{ fontSize: 22, fontWeight: 900, color: TEC_COLORS.text, marginTop: 16 }}>Opportunity not found</h1>
-          <p style={{ fontSize: 13, color: TEC_COLORS.subtext }}>No opportunity <code>{id}</code> on the board.</p>
+          <h1 style={{ fontSize: 22, fontWeight: 900, color: TEC_COLORS.text, marginTop: 16 }}>
+            {unavailable ? 'Couldn’t load this opportunity' : 'Opportunity not found'}
+          </h1>
+          <p style={{ fontSize: 13, color: TEC_COLORS.subtext }}>
+            {unavailable
+              ? 'The opportunity board is unavailable right now. Please try again shortly.'
+              : <>No opportunity <code>{id}</code> on the board.</>}
+          </p>
         </div>
       </main>
     );
@@ -101,9 +92,9 @@ export default async function OpportunityPage(
         )}
 
         <p style={{ fontSize: 11, color: TEC_COLORS.subtext, margin: '22px 0 0', lineHeight: 1.5 }}>
-          This is a read-only sample. NX matches + presents opportunities and routes you
-          to the poster — verification via Zone/KYC, trust via Connection, capital via
-          payment-service + FundX. NX is the Opportunity Exchange (ADR-010), not a security app.
+          NX matches + presents opportunities and routes you to the poster — verification
+          via Zone/KYC, trust via Connection, capital via payment-service + FundX. NX is
+          the Opportunity Exchange (ADR-010), not a security app.
         </p>
       </div>
     </main>
