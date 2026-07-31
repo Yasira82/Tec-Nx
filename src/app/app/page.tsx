@@ -9,6 +9,7 @@
 // read-only board via /api/bff/nx/opportunities; a real posting index + trust-
 // weighted matching (Life intent + Connection graph) is Phase 1+.
 import Link from 'next/link';
+import { InviteCard } from '@/components/referral/InviteCard';
 import { useEffect, useMemo, useState } from 'react';
 import { usePiAuth } from '@yasser172/tec-auth';
 import { TEC_COLORS } from '@yasser172/tec-ui';
@@ -156,6 +157,7 @@ export default function NxHome() {
           + FundX), verifies parties (→ Zone / tec-kyc-service), or owns the relationship
           graph (→ Connection). Investments shown are indicative/educational only (ADR-010).
         </p>
+        <InviteCard />
       </div>
     </main>
   );

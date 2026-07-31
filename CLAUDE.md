@@ -27,7 +27,7 @@ Built from `tec-template-base` (Next.js 15 frontend).
 legal + a themed board (search · kind filter · trust-first ranking over a curated
 **read-only sample**) + an `/opportunity/[id]` detail page + **NX Pro** (the Pi Portal
 "Process a Transaction" gate). A real posting index + trust-weighted matching (Life
-intent + Connection graph) is Phase 1+. Not yet deployed.
+intent + Connection graph) is Phase 1+. Deployed (Mainnet) · Pi App ID registered · env set · payment live · referral growth loop wired (C-133).
 
 ---
 
@@ -37,7 +37,7 @@ intent + Connection graph) is Phase 1+. Not yet deployed.
 |-------|-------|
 | **App** | TEC NX |
 | **Domain** | `https://nx.tecosystem.app` |
-| **Pi App ID** | ⏳ TBD — register at Pi Developer Portal · then Vercel `NEXT_PUBLIC_PI_APP_ID` |
+| **Pi App ID** | ✅ Registered (Mainnet) · Vercel `NEXT_PUBLIC_PI_APP_ID` |
 | **APP_SOURCE slug** | `nx` (payment-service resolves `PI_API_KEY_NX`) |
 | **PI_SANDBOX** | `false` (Mainnet) |
 
