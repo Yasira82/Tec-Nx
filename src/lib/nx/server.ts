@@ -1,10 +1,11 @@
-import { getOpportunity, type Kind, type Opportunity } from './opportunities';
+import { type Kind, type Opportunity } from './opportunities';
 
 // Server-only NX backend access (C-112, repurposed by ADR-010). Calls the real NX
 // opportunity module (identity-service) via the gateway with the inter-service key,
-// and maps a backend row to the frontend Opportunity shape. Everything here degrades
-// to the curated static board so the app is never blank / never 500s. NEW-A: the
-// gateway URL is server-only (API_GATEWAY_URL) — never shipped to the client.
+// and maps a backend row to the frontend Opportunity shape. Real data end-to-end
+// (C-135 §4): an unreachable backend resolves to `unavailable` (no opportunity) —
+// never a fabricated sample. NEW-A: the gateway URL is server-only
+// (API_GATEWAY_URL) — never shipped to the client.
 const GW = process.env.API_GATEWAY_URL ?? '';
 
 const gwHeaders = () => ({
@@ -31,12 +32,12 @@ export function opportunityFromBackend(o: Record<string, unknown>): Opportunity 
 
 export interface ResolvedOpportunity {
   opportunity: Opportunity | null;
-  source:      'live' | 'sample';
+  source:      'live' | 'unavailable';
 }
 
-// One opportunity by handle — live backend first, curated sample as fallback. A live
-// 404 is authoritative (opportunity: null, source: 'live'); an unreachable backend
-// falls back to the sample board (source: 'sample').
+// One opportunity by handle — live backend only. A live 404 is authoritative
+// (opportunity: null, source: 'live'); an unreachable backend resolves to
+// (opportunity: null, source: 'unavailable'). Never a fabricated sample.
 export async function resolveOpportunity(id: string): Promise<ResolvedOpportunity> {
   if (GW) {
     try {
@@ -49,7 +50,7 @@ export async function resolveOpportunity(id: string): Promise<ResolvedOpportunit
         if (o) return { opportunity: opportunityFromBackend(o as Record<string, unknown>), source: 'live' };
       }
       if (res.status === 404) return { opportunity: null, source: 'live' };
-    } catch { /* fall through to the curated static board */ }
+    } catch { /* unreachable → unavailable below */ }
   }
-  return { opportunity: getOpportunity(id), source: 'sample' };
+  return { opportunity: null, source: 'unavailable' };
 }

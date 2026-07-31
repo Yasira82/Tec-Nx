@@ -9,12 +9,13 @@
 // read-only board via /api/bff/nx/opportunities; a real posting index + trust-
 // weighted matching (Life intent + Connection graph) is Phase 1+.
 import Link from 'next/link';
+import { InviteCard } from '@/components/referral/InviteCard';
 import { useEffect, useMemo, useState } from 'react';
 import { usePiAuth } from '@yasser172/tec-auth';
 import { TEC_COLORS } from '@yasser172/tec-ui';
 import { NxPro } from './components/NxPro';
 import {
-  OPPORTUNITIES, KINDS, KIND_META, matchOpportunities,
+  KINDS, KIND_META,
   type Kind, type Opportunity,
 } from '@/lib/nx/opportunities';
 
@@ -24,11 +25,13 @@ export default function NxHome() {
 
   const [query, setQuery] = useState('');
   const [kind,  setKind]  = useState<Kind | 'all'>('all');
-  const [board, setBoard] = useState<Opportunity[]>(OPPORTUNITIES);
-  const [source, setSource] = useState<'sample' | 'live'>('sample');
+  const [board, setBoard] = useState<Opportunity[]>([]);
+  // Real data end-to-end (C-135 §4): live board or an honest state — never a sample.
+  const [status, setStatus] = useState<'loading' | 'ready' | 'unavailable'>('loading');
 
   useEffect(() => {
     let alive = true;
+    setStatus('loading');
     const t = setTimeout(async () => {
       try {
         const qs = new URLSearchParams();
@@ -36,11 +39,16 @@ export default function NxHome() {
         if (kind !== 'all') qs.set('kind', kind);
         const res  = await fetch(`/api/bff/nx/opportunities?${qs.toString()}`, { credentials: 'include' });
         const data = await res.json().catch(() => null);
-        if (!alive || !data || !Array.isArray(data.opportunities)) return;
-        setBoard(data.opportunities as Opportunity[]);
-        setSource(data.source === 'live' ? 'live' : 'sample');
+        if (!alive) return;
+        if (data && data.source === 'live' && Array.isArray(data.opportunities)) {
+          setBoard(data.opportunities as Opportunity[]);
+          setStatus('ready');
+        } else {
+          setBoard([]);
+          setStatus('unavailable');   // backend down — honest, no fabricated board
+        }
       } catch {
-        if (alive) setBoard(matchOpportunities({ query, kind }));   // fail-safe local
+        if (alive) { setBoard([]); setStatus('unavailable'); }
       }
     }, 180);
     return () => { alive = false; clearTimeout(t); };
@@ -101,14 +109,26 @@ export default function NxHome() {
         <section style={{ marginTop: 26 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
             <h2 style={{ fontSize: 16, fontWeight: 800, color: TEC_COLORS.text, margin: 0 }}>
-              {count} opportunit{count === 1 ? 'y' : 'ies'}
+              {status === 'ready' ? `${count} opportunit${count === 1 ? 'y' : 'ies'}` : 'Opportunities'}
             </h2>
-            <span style={{ fontSize: 11, color: TEC_COLORS.subtext, border: `1px solid ${TEC_COLORS.gold}33`, borderRadius: 999, padding: '2px 10px' }}>
-              {source === 'live' ? 'live board' : 'sample board'} · {verified} verified
-            </span>
+            {status === 'ready' && (
+              <span style={{ fontSize: 11, color: TEC_COLORS.subtext, border: `1px solid ${TEC_COLORS.gold}33`, borderRadius: 999, padding: '2px 10px' }}>
+                live board · {verified} verified
+              </span>
+            )}
           </div>
           <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
-            {board.map((o) => (
+            {status === 'loading' && (
+              <div style={{ ...card, textAlign: 'center', color: TEC_COLORS.subtext, fontSize: 13 }}>
+                Loading opportunities…
+              </div>
+            )}
+            {status === 'unavailable' && (
+              <div style={{ ...card, textAlign: 'center', color: TEC_COLORS.subtext, fontSize: 13 }}>
+                The opportunity board is unavailable right now. Please try again shortly.
+              </div>
+            )}
+            {status === 'ready' && board.map((o) => (
               <Link key={o.id} href={`/opportunity/${o.id}`} style={card}>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
                   <span style={{ fontSize: 14, fontWeight: 800, color: TEC_COLORS.text }}>
@@ -124,7 +144,7 @@ export default function NxHome() {
                 <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{o.summary}</div>
               </Link>
             ))}
-            {count === 0 && (
+            {status === 'ready' && count === 0 && (
               <div style={{ ...card, textAlign: 'center', color: TEC_COLORS.subtext, fontSize: 13 }}>
                 No matches. Try a different term or category.
               </div>
@@ -137,6 +157,7 @@ export default function NxHome() {
           + FundX), verifies parties (→ Zone / tec-kyc-service), or owns the relationship
           graph (→ Connection). Investments shown are indicative/educational only (ADR-010).
         </p>
+        <InviteCard />
       </div>
     </main>
   );

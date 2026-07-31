@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { matchOpportunities, KINDS, type Kind } from '@/lib/nx/opportunities';
+import { KINDS, type Kind } from '@/lib/nx/opportunities';
 import { opportunityFromBackend } from '@/lib/nx/server';
 
 // GET /api/bff/nx/opportunities?q=&kind= — the Opportunity Exchange board
 // (C-112, repurposed by ADR-010). NX matches + ranks opportunities. Server-only:
 // calls the real NX backend (opportunity module in identity-service) via the
-// gateway and returns source:'live'; falls back to the curated read-only SAMPLE
-// (ranked locally, source:'sample') if the backend is unreachable, so the board is
-// never blank. Public board info; no capital, no verification, no graph mutation
-// here (ADR-010). NEW-A: the gateway URL is server-only (API_GATEWAY_URL).
+// gateway and returns source:'live'. Real data end-to-end (C-135 §4): an
+// unreachable backend returns source:'unavailable' with an empty board — never a
+// fabricated sample. Public board info; no capital, no verification, no graph
+// mutation here (ADR-010). NEW-A: the gateway URL is server-only (API_GATEWAY_URL).
 const GW = process.env.API_GATEWAY_URL ?? '';
 
 const gwHeaders = () => ({
@@ -42,12 +42,11 @@ export async function GET(req: NextRequest) {
           );
         }
       }
-    } catch { /* fall through to the curated static board */ }
+    } catch { /* unreachable → unavailable below */ }
   }
 
-  const opportunities = matchOpportunities({ query: q, kind });
   return NextResponse.json(
-    { source: 'sample', opportunities, count: opportunities.length },
-    { headers: { 'Cache-Control': 'public, max-age=60' } },
+    { source: 'unavailable', opportunities: [], count: 0 },
+    { headers: { 'Cache-Control': 'no-store' } },
   );
 }
