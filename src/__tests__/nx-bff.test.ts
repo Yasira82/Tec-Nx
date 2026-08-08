@@ -7,6 +7,14 @@ import { NextRequest } from 'next/server';
 // from the LIVE subscription (visibility only). Public board search is tested elsewhere.
 const GW = 'https://api.example.com';
 
+// Set at MODULE LOAD (before any dynamic import) so `const GW = process.env.API_GATEWAY_URL`
+// in the route/server modules reads it. E2E_ALLOW_NETWORK disables the CI e2e-stub: the BFF
+// routes short-circuit to a stub when `CI==='true'` (GitHub Actions sets it), which would
+// skip the real gateway fetch these tests assert on. We want the real logic under test here.
+process.env.API_GATEWAY_URL   = GW;
+process.env.INTERNAL_SECRET   = 'secret';
+process.env.E2E_ALLOW_NETWORK = 'true';
+
 const makeReq = (opts: { cookies?: Record<string, string>; body?: unknown; method?: string; url?: string }) => {
   const cookieStr = opts.cookies
     ? Object.entries(opts.cookies).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('; ')
