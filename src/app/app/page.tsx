@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { usePiAuth } from '@yasser172/tec-auth';
 import { TEC_COLORS } from '@yasser172/tec-ui';
 import { NxPro } from './components/NxPro';
+import PostOpportunity from './components/PostOpportunity';
 import {
   KINDS, KIND_META,
   type Kind, type Opportunity,
@@ -28,6 +29,7 @@ export default function NxHome() {
   const [board, setBoard] = useState<Opportunity[]>([]);
   // Real data end-to-end (C-135 §4): live board or an honest state — never a sample.
   const [status, setStatus] = useState<'loading' | 'ready' | 'unavailable'>('loading');
+  const [refresh, setRefresh] = useState(0);   // bumped after a new post to reload the board
 
   useEffect(() => {
     let alive = true;
@@ -52,7 +54,7 @@ export default function NxHome() {
       }
     }, 180);
     return () => { alive = false; clearTimeout(t); };
-  }, [query, kind]);
+  }, [query, kind, refresh]);
 
   const count = board.length;
   const verified = useMemo(() => board.filter((o) => o.verified).length, [board]);
@@ -105,6 +107,9 @@ export default function NxHome() {
         {/* NX Pro — real Pi U2A payment (service subscription). */}
         <NxPro />
 
+        {/* Post an opportunity — NX becomes a real two-sided community service. */}
+        <PostOpportunity onPosted={() => setRefresh((n) => n + 1)} />
+
         {/* Board */}
         <section style={{ marginTop: 26 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
@@ -134,8 +139,13 @@ export default function NxHome() {
                   <span style={{ fontSize: 14, fontWeight: 800, color: TEC_COLORS.text }}>
                     {KIND_META[o.kind].icon} {o.title}
                   </span>
-                  <span style={{ fontSize: 10, fontWeight: 800, whiteSpace: 'nowrap', color: o.verified ? TEC_COLORS.gold : TEC_COLORS.subtext, border: `1px solid ${o.verified ? TEC_COLORS.gold + '55' : TEC_COLORS.subtext + '55'}`, borderRadius: 999, padding: '2px 8px' }}>
-                    {o.verified ? '✅ Verified' : 'Unverified'}
+                  <span style={{ display: 'flex', gap: 6, whiteSpace: 'nowrap' }}>
+                    {o.featured && (
+                      <span style={{ fontSize: 10, fontWeight: 800, color: TEC_COLORS.gold, border: `1px solid ${TEC_COLORS.gold}55`, borderRadius: 999, padding: '2px 8px' }}>⭐ Featured</span>
+                    )}
+                    <span style={{ fontSize: 10, fontWeight: 800, color: o.verified ? TEC_COLORS.gold : TEC_COLORS.subtext, border: `1px solid ${o.verified ? TEC_COLORS.gold + '55' : TEC_COLORS.subtext + '55'}`, borderRadius: 999, padding: '2px 8px' }}>
+                      {o.verified ? '✅ Verified' : 'Unverified'}
+                    </span>
                   </span>
                 </div>
                 <div style={{ fontSize: 11, color: TEC_COLORS.gold, marginTop: 3 }}>
