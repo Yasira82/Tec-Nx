@@ -15,6 +15,7 @@ export type Kind =
 // Verified = the poster/org is KYC/Zone-verified — NX presents the badge, never mints it.
 export interface Opportunity {
   id:        string;
+  owner?:    string;      // poster's Pi username (public) — used to gate owner-only actions
   kind:      Kind;
   title:     string;
   org:       string;      // who is offering it
@@ -22,6 +23,7 @@ export interface Opportunity {
   location:  string;      // "Remote" or an area label
   reward:    string;      // pay / grant size / equity — indicative, in π or terms
   verified:  boolean;     // poster verified (Zone/kyc) — presented, not minted
+  featured?: boolean;     // NX Pro — featured placement (visibility only, ranks below verified)
   tags:      string[];
 }
 
