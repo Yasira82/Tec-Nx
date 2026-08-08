@@ -48,7 +48,7 @@ describe('POST /api/bff/nx/opportunities (post)', () => {
   it('posts with the session owner + forwards NO owner from the body', async () => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch')
       .mockResolvedValueOnce(ok({ opportunity: { handle: 'pi-dev', title: 'Pi dev', verified: false } }, 201)) // create
-      .mockResolvedValueOnce(ok({ plan: 'FREE', isActive: true }));                                             // sub (not Pro)
+      .mockResolvedValueOnce(ok({ subscription: { plan: 'FREE', isActive: true } }));                                             // sub (not Pro)
     const { POST } = await import('@/app/api/bff/nx/opportunities/route');
     const res = await POST(makeReq({ cookies: { tec_user: JSON.stringify({ piUsername: 'maya' }) }, body: { kind: 'job', title: 'Pi dev', owner: 'HACKER' } }));
     expect(res.status).toBe(201);
@@ -62,7 +62,7 @@ describe('POST /api/bff/nx/opportunities (post)', () => {
   it('Pro poster → featured is synced after the post', async () => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch')
       .mockResolvedValueOnce(ok({ opportunity: { handle: 'pi-dev', verified: false } }, 201)) // create
-      .mockResolvedValueOnce(ok({ plan: 'PRO', isActive: true, isExpired: false }))           // sub = Pro
+      .mockResolvedValueOnce(ok({ subscription: { plan: 'PRO', isActive: true, isExpired: false } }))           // sub = Pro
       .mockResolvedValueOnce(ok({ featured: true, count: 1 }));                                // featured PATCH
     const { POST } = await import('@/app/api/bff/nx/opportunities/route');
     await POST(makeReq({ cookies: { tec_user: JSON.stringify({ piUsername: 'maya' }), tec_access_token: 'tok' }, body: { kind: 'grant', title: 'Builder grant' } }));
@@ -83,7 +83,7 @@ describe('GET /api/bff/nx/mine (own posts + featured sync)', () => {
   it('returns the caller own posts and reconciles featured with live Pro', async () => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch')
       .mockResolvedValueOnce(ok({ results: [{ handle: 'pi-dev', title: 'Pi dev', featured: false, verified: false }] })) // mine
-      .mockResolvedValueOnce(ok({ plan: 'PRO', isActive: true, isExpired: false }))                                      // sub = Pro
+      .mockResolvedValueOnce(ok({ subscription: { plan: 'PRO', isActive: true, isExpired: false } }))                                      // sub = Pro
       .mockResolvedValueOnce(ok({ featured: true, count: 1 }));                                                          // reconcile PATCH
     const { GET } = await import('@/app/api/bff/nx/mine/route');
     const res  = await GET(makeReq({ method: 'GET', cookies: { tec_user: JSON.stringify({ piUsername: 'maya' }), tec_access_token: 'tok' }, url: 'http://localhost/api/bff/nx/mine' }));
