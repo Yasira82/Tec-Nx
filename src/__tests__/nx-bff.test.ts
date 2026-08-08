@@ -21,6 +21,11 @@ const ok = (data: unknown, status = 200) => ({ ok: status >= 200 && status < 300
 
 beforeEach(() => {
   vi.clearAllMocks();
+  // The route + server modules capture `const GW = process.env.API_GATEWAY_URL` at import
+  // time. Reset the module registry each test so the dynamic import below re-reads the env
+  // we set here — otherwise a cached module (from an earlier import) keeps a stale/empty GW
+  // and the gateway fetch is skipped (green locally, flaky in CI depending on import order).
+  vi.resetModules();
   process.env.API_GATEWAY_URL = GW;
   process.env.INTERNAL_SECRET = 'secret';
 });
