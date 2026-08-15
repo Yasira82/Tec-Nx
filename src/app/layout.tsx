@@ -5,7 +5,7 @@ import '@/styles/tec-design-tokens.css';
 
 export const metadata: Metadata = {
   title:       'TEC NX — Opportunity Exchange',
-  description: 'The opportunity exchange for the Pi economy: jobs, partnerships, grants, hackathons, investments, and co-founders (C-112, ADR-010).',
+  description: 'The opportunity exchange for the Pi economy: jobs, partnerships, grants, hackathons, investments, and co-founders.',
 };
 
 export default function RootLayout({
