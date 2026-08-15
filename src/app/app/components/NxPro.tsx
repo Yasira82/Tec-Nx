@@ -161,8 +161,8 @@ export function NxPro() {
       </div>
       <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 8, lineHeight: 1.5 }}>
         For posters — featured opportunities, boosted visibility, and applicant insights.
-        NX matches + presents; it never processes capital (→ payment-service + FundX),
-        verifies parties (→ Zone/KYC), or owns the graph (→ Connection) — ADR-010.
+        NX helps you find and connect to opportunities. Funding and verification are
+        handled securely in the right place.
       </div>
 
       <button

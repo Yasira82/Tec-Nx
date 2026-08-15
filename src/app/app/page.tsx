@@ -80,9 +80,9 @@ export default function NxHome() {
             {isLoading ? 'Find your next opportunity' : `Opportunities, ${name}`}
           </h1>
           <p style={{ fontSize: 14, color: TEC_COLORS.subtext, margin: '6px 0 0', lineHeight: 1.6 }}>
-            The Pi economy’s opportunity exchange — jobs, partnerships, grants,
-            hackathons, investments, co-founders, mentorship. Ranked trust-first; NX
-            matches and presents (ADR-010).
+            The Pi economy’s opportunity board — jobs, partnerships, grants, hackathons,
+            investments, co-founders, and mentorship. Ranked trust-first to help you
+            find the right fit.
           </p>
         </header>
 
@@ -163,9 +163,9 @@ export default function NxHome() {
         </section>
 
         <p style={{ fontSize: 11, color: TEC_COLORS.subtext, margin: '24px 0 0', lineHeight: 1.5 }}>
-          NX connects people to opportunities. It never moves capital (→ payment-service
-          + FundX), verifies parties (→ Zone / tec-kyc-service), or owns the relationship
-          graph (→ Connection). Investments shown are indicative/educational only (ADR-010).
+          NX connects people to opportunities. It doesn&apos;t move money or verify parties
+          itself — those happen in the right place. Any investment figures shown are
+          for information only.
         </p>
         <InviteCard />
       </div>

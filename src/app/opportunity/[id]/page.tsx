@@ -69,7 +69,7 @@ export default async function OpportunityPage(
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginTop: 20 }}>
           <div style={factCard}>
             <div style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>💠 Reward</div>
-            <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{o.reward} · indicative (ADR-010). Capital moves via payment-service + FundX, never NX.</div>
+            <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>{o.reward} · for information only. Any funding is handled securely elsewhere.</div>
           </div>
           <div style={factCard}>
             <div style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>📍 Location</div>
@@ -78,7 +78,7 @@ export default async function OpportunityPage(
           <div style={factCard}>
             <div style={{ fontSize: 13, fontWeight: 800, color: TEC_COLORS.text }}>🛡️ Trust</div>
             <div style={{ fontSize: 12, color: TEC_COLORS.subtext, marginTop: 5, lineHeight: 1.5 }}>
-              {o.verified ? 'Poster is KYC/Zone-verified — NX presents the badge, never mints it.' : 'Poster not yet verified. NX never self-certifies a party.'}
+              {o.verified ? 'Poster is verified.' : 'Poster not yet verified.'}
             </div>
           </div>
         </div>
@@ -92,9 +92,9 @@ export default async function OpportunityPage(
         )}
 
         <p style={{ fontSize: 11, color: TEC_COLORS.subtext, margin: '22px 0 0', lineHeight: 1.5 }}>
-          NX matches + presents opportunities and routes you to the poster — verification
-          via Zone/KYC, trust via Connection, capital via payment-service + FundX. NX is
-          the Opportunity Exchange (ADR-010), not a security app.
+          NX helps you find opportunities and connects you with the poster. Verification,
+          trust, and any funding are handled in the right place — NX is the opportunity
+          board.
         </p>
       </div>
     </main>
