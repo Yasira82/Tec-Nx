@@ -64,7 +64,7 @@ export default function PostOpportunity({ onPosted }: { onPosted?: () => void })
       </div>
       <p style={{ fontSize: 12, color: TEC_COLORS.subtext, margin: '6px 0 0', lineHeight: 1.5 }}>
         Share a job, grant, gig, or partnership with the whole Pi community. Posts start unverified
-        (Zone/kyc verifies later). {isPro ? 'Your posts are ⭐ Featured (Pro).' : 'Merchant Pro ⭐ features your posts.'}
+        (verification happens later). {isPro ? 'Your posts are ⭐ Featured (Pro).' : 'Merchant Pro ⭐ features your posts.'}
       </p>
 
       {open && (

@@ -22,4 +22,21 @@ export const ar = {
     appsTitle: 'منظومة TEC',
     appsCount: '24 تطبيق',
   },
+  nx: {
+    brand:       'TEC NX · بورصة الفرص',
+    board:       'اعثر على فرصتك القادمة',
+    boardName:   'فرص، {name}',
+    subtitle:    'لوحة فرص اقتصاد Pi — وظائف، شراكات، منح، هاكاثونات، استثمارات، شركاء تأسيس، وإرشاد. مرتّبة بالثقة أولاً عشان تلاقي الأنسب ليك.',
+    nav: { board: 'اللوحة', post: 'انشر', pro: 'Pro', settings: 'الإعدادات' },
+    searchPlaceholder: 'ابحث عن فرص…',
+    all: 'الكل',
+    footer:      'NX بيربط الناس بالفرص. مابيحرّكش أموال ولا بيوثّق الأطراف بنفسه — دول بيحصلوا في مكانهم الصح. أي أرقام استثمار معروضة للعلم فقط.',
+    settings: {
+      profile: 'الملف الشخصي', planFree: 'مجاني', planPro: 'Pro',
+      connectedPi: 'متصل بـ Pi', notSignedIn: 'غير مسجّل الدخول', member: 'عضو TEC',
+      appearance: 'المظهر', language: 'اللغة', languageDesc: 'لغة العرض',
+      about: 'حول', version: 'الإصدار', domain: 'النطاق', ecosystem: 'المنظومة',
+      builtOn: 'مبني على', builtOnPi: 'شبكة Pi', logout: 'تسجيل الخروج',
+    },
+  },
 };
