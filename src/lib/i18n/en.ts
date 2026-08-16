@@ -22,4 +22,21 @@ export const en = {
     appsTitle: 'TEC Ecosystem',
     appsCount: '24 Apps',
   },
+  nx: {
+    brand:       'TEC NX · Opportunity Exchange',
+    board:       'Find your next opportunity',
+    boardName:   'Opportunities, {name}',
+    subtitle:    'The Pi economy’s opportunity board — jobs, partnerships, grants, hackathons, investments, co-founders, and mentorship. Ranked trust-first to help you find the right fit.',
+    nav: { board: 'Board', post: 'Post', pro: 'Pro', settings: 'Settings' },
+    searchPlaceholder: 'Search opportunities…',
+    all: 'All',
+    footer:      'NX connects people to opportunities. It doesn’t move money or verify parties itself — those happen in the right place. Any investment figures shown are for information only.',
+    settings: {
+      profile: 'Profile', planFree: 'Free', planPro: 'Pro',
+      connectedPi: 'Connected to Pi', notSignedIn: 'Not signed in', member: 'TEC Member',
+      appearance: 'Appearance', language: 'Language', languageDesc: 'Display language',
+      about: 'About', version: 'Version', domain: 'Domain', ecosystem: 'Ecosystem',
+      builtOn: 'Built on', builtOnPi: 'Pi Network', logout: 'Logout',
+    },
+  },
 };
