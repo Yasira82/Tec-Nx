@@ -22,7 +22,7 @@ import {
 
 export default function NxHome() {
   const { user, isLoading } = usePiAuth();
-  const name = user?.piUsername ? `@${user.piUsername}` : 'there';
+  const name = user?.piUsername ? `@${user.piUsername}` : '';
 
   const [query, setQuery] = useState('');
   const [kind,  setKind]  = useState<Kind | 'all'>('all');
@@ -77,7 +77,7 @@ export default function NxHome() {
         <header>
           <div style={{ fontSize: 12, letterSpacing: 1, color: TEC_COLORS.subtext, textTransform: 'uppercase' }}>TEC NX · Opportunity Exchange</div>
           <h1 style={{ fontSize: 26, fontWeight: 900, color: TEC_COLORS.gold, margin: '6px 0 0' }}>
-            {isLoading ? 'Find your next opportunity' : `Opportunities, ${name}`}
+            {isLoading || !name ? 'Find your next opportunity' : `Opportunities, ${name}`}
           </h1>
           <p style={{ fontSize: 14, color: TEC_COLORS.subtext, margin: '6px 0 0', lineHeight: 1.6 }}>
             The Pi economy’s opportunity board — jobs, partnerships, grants, hackathons,
