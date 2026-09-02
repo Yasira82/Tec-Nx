@@ -40,21 +40,30 @@ export const KIND_META: Record<Kind, { icon: string; label: string }> = {
 export const KINDS = Object.keys(KIND_META) as Kind[];
 
 // Curated sample board (demo). Read-only.
+// ⚠️ Every fixture below is UNVERIFIED, and that is enforced rather than
+// remembered (see the `verified` values). A sample row carrying a verification
+// badge is the platform verifying itself — C-120 and C-108 §4 both forbid it,
+// and C-135 §4 forbids a fabricated directory reaching a screen.
+//
+// These arrays are NOT rendered today; the pages resolve live data. That is
+// exactly why this matters: Explorer's seed was dead too, until someone wired
+// it and eight invented businesses appeared in production with six "Verified"
+// badges among them. A fixture is one import away from being real.
 export const OPPORTUNITIES: Opportunity[] = [
   {
     id: 'pi-app-dev', kind: 'job', title: 'Pi app developer (part-time)', org: 'Olive Branch Café',
     summary: 'Build a Pi-payment ordering page for a verified café. Paid in Pi per milestone.',
-    location: 'Remote', reward: '~ 300π / project', verified: true, tags: ['nextjs', 'pi-sdk', 'part-time'],
+    location: 'Remote', reward: '~ 300π / project', verified: false, tags: ['nextjs', 'pi-sdk', 'part-time'],
   },
   {
     id: 'merchant-onboarding', kind: 'partnership', title: 'Regional merchant onboarding partner', org: 'TEC Explorer',
     summary: 'Help local shops accept Pi and get listed. Revenue share per onboarded merchant.',
-    location: 'Your city', reward: 'Revenue share', verified: true, tags: ['growth', 'onboarding', 'local'],
+    location: 'Your city', reward: 'Revenue share', verified: false, tags: ['growth', 'onboarding', 'local'],
   },
   {
     id: 'builder-grant', kind: 'grant', title: 'Pi Builder Grant — open call', org: 'TEC DX',
     summary: 'Micro-grants for open-source tools that help others build on Pi. Milestone-based.',
-    location: 'Remote', reward: 'up to 2,000π', verified: true, tags: ['open-source', 'tooling', 'grant'],
+    location: 'Remote', reward: 'up to 2,000π', verified: false, tags: ['open-source', 'tooling', 'grant'],
   },
   {
     id: 'summer-hackathon', kind: 'hackathon', title: 'Summer Pi Hackathon', org: 'Pi Community',
@@ -64,17 +73,17 @@ export const OPPORTUNITIES: Opportunity[] = [
   {
     id: 'seed-round', kind: 'investment', title: 'Seed round — Pi logistics startup', org: 'Verified founder',
     summary: 'A KYC-verified founder is raising a small round. Educational/indicative only — capital moves via payment-service + FundX, never NX.',
-    location: 'Remote', reward: 'Equity', verified: true, tags: ['seed', 'logistics', 'startup'],
+    location: 'Remote', reward: 'Equity', verified: false, tags: ['seed', 'logistics', 'startup'],
   },
   {
     id: 'cofounder-cto', kind: 'cofounder', title: 'Technical co-founder wanted', org: '@maya',
     summary: 'Non-technical founder with a validated idea seeks a CTO co-founder for a Pi marketplace.',
-    location: 'Remote', reward: 'Equity + salary later', verified: true, tags: ['cto', 'equity', 'marketplace'],
+    location: 'Remote', reward: 'Equity + salary later', verified: false, tags: ['cto', 'equity', 'marketplace'],
   },
   {
     id: 'mentor-pi', kind: 'mentorship', title: 'Pi SDK mentorship (free)', org: 'Lumen Tutoring',
     summary: 'Weekly office hours for new Pi builders. Free — pay it forward when you ship.',
-    location: 'Remote', reward: 'Free', verified: true, tags: ['mentorship', 'learning', 'community'],
+    location: 'Remote', reward: 'Free', verified: false, tags: ['mentorship', 'learning', 'community'],
   },
   {
     id: 'design-partner', kind: 'partnership', title: 'Design partner — new Pi wallet UX', org: 'Pixel Forge Studio',
