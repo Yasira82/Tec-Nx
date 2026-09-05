@@ -51,4 +51,13 @@ describe('TEC NX — Opportunity Exchange (C-112 / ADR-010, read-only)', () => {
     const blob = OPPORTUNITIES.map((o) => `${o.title} ${o.summary}`).join(' ').toLowerCase();
     expect(blob).toMatch(/job|partner|grant|hackathon|co-?founder|mentor/);
   });
+
+  it('NO fixture claims a Zone verification', () => {
+    // A fixture carrying a verification badge is the platform verifying itself,
+    // which C-120 and C-108 §4 both forbid. These rows are not rendered today —
+    // and that is exactly why it matters: Explorer's seed was dead too, until
+    // someone wired it and eight invented businesses appeared in production with
+    // six "Verified" badges among them. A fixture is one import away from real.
+    expect(OPPORTUNITIES.every((x) => x.verified === false)).toBe(true);
+  });
 });
