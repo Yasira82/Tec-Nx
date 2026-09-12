@@ -1,3 +1,4 @@
+import { PiWarmup } from '@/components/pi/PiWarmup';
 import { RefCapture } from '@/components/referral/RefCapture';
 import { RefApply } from '@/components/referral/RefApply';
 import { LocaleProvider } from '@/lib/i18n';
@@ -23,10 +24,8 @@ export default function RootLayout({
             no white frame shows around the app in Pi Browser. */}
         <meta name="theme-color" content="#050816" />
         <meta name="color-scheme" content="dark" />
-        <script
-          src="https://sdk.minepi.com/pi-sdk.js"
-          async
-        />
+        {/* The Pi SDK is NOT loaded here. It is injected below, and ONLY when
+            this is not a Hub-owned session — see the note in that script. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -56,7 +55,18 @@ export default function RootLayout({
                     return;
                   }
                 } catch(e) {}
-                if (typeof window.Pi !== 'undefined') {
+                // Standalone session — load the SDK now, then init it. In a
+                // Hub-owned session it is not merely left un-init'd, it is NOT
+                // LOADED AT ALL: pulling pi-sdk.js opens Pi's bridge on this
+                // origin regardless of init, and ADR-007 says an app in a
+                // Hub-owned session must not touch Pi. Loading its SDK is
+                // touching it.
+                var __boot = function () {
+                  if (typeof window.Pi === 'undefined') {
+                    window.__TEC_PI_ERROR = true;
+                    window.dispatchEvent(new Event('tec-pi-error'));
+                    return;
+                  }
                   try {
                     var __isTestnetHost = /\\.vercel\\.app$/i.test(location.hostname)
                       || /-test\\.tecosystem\\.app$/i.test(location.hostname);
@@ -86,13 +96,25 @@ export default function RootLayout({
                     window.__TEC_PI_ERROR = true;
                     window.dispatchEvent(new Event('tec-pi-error'));
                   }
-                }
+                };
+
+                if (typeof window.Pi !== 'undefined') { __boot(); return; }
+                var __s = document.createElement('script');
+                __s.src   = 'https://sdk.minepi.com/pi-sdk.js';
+                __s.async = true;
+                __s.onload  = __boot;
+                __s.onerror = function () {
+                  window.__TEC_PI_ERROR = true;
+                  window.dispatchEvent(new Event('tec-pi-error'));
+                };
+                document.head.appendChild(__s);
               });
             `,
           }}
         />
       </head>
       <body>
+        <PiWarmup />
         <LocaleProvider>
           <RefCapture />
           <RefApply />
