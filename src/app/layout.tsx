@@ -5,6 +5,7 @@ import { LocaleProvider } from '@/lib/i18n';
 import { HUB_HOSTS } from '@/lib/pi-network';
 import type { Metadata } from 'next';
 import '@/styles/tec-design-tokens.css';
+import { ArrivalReport } from '@/components/pioneer/ArrivalReport';
 
 export const metadata: Metadata = {
   title:       'TEC NX — Opportunity Exchange',
@@ -115,6 +116,7 @@ export default function RootLayout({
       </head>
       <body>
         <PiWarmup />
+        <ArrivalReport />
         <LocaleProvider>
           <RefCapture />
           <RefApply />
