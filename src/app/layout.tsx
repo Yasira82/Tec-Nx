@@ -6,6 +6,7 @@ import { HUB_HOSTS } from '@/lib/pi-network';
 import type { Metadata } from 'next';
 import '@/styles/tec-design-tokens.css';
 import { ArrivalReport } from '@/components/pioneer/ArrivalReport';
+import { QuestReturn } from '@/components/pioneer/QuestReturn';
 
 export const metadata: Metadata = {
   title:       'TEC NX — Opportunity Exchange',
@@ -117,6 +118,7 @@ export default function RootLayout({
       <body>
         <PiWarmup />
         <ArrivalReport />
+        <QuestReturn />
         <LocaleProvider>
           <RefCapture />
           <RefApply />
