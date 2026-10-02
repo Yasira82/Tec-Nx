@@ -1,4 +1,5 @@
 import { type Kind, type Opportunity } from './opportunities';
+import { APP_SOURCE } from '@/lib/app-source';
 
 // Server-only NX backend access (C-112, repurposed by ADR-010). Calls the real NX
 // opportunity module (identity-service) via the gateway with the inter-service key,
@@ -38,7 +39,7 @@ export function opportunityFromBackend(o: Record<string, unknown>): Opportunity 
 export async function resolveProStatus(token: string | null): Promise<boolean> {
   if (!GW || !token) return false;
   try {
-    const res = await fetch(`${GW}/api/commerce/subscriptions/status`, {
+    const res = await fetch(`${GW}/api/commerce/subscriptions/status?app=${encodeURIComponent(APP_SOURCE)}`, {
       headers: { ...gwHeaders(), Authorization: `Bearer ${token}` }, cache: 'no-store',
     });
     if (!res.ok) return false;
