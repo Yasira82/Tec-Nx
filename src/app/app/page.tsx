@@ -1,5 +1,7 @@
 'use client';
 
+import { SignInGate } from '@/components/pi/SignInGate';
+
 // TEC NX — the Opportunity Exchange (C-112, repurposed by ADR-010). "What is the
 // right opportunity for me now?" NX connects people to opportunities — jobs,
 // partnerships, grants, hackathons, investments, co-founders, mentorship. NX matches
@@ -22,7 +24,7 @@ import {
   type Kind, type Opportunity,
 } from '@/lib/nx/opportunities';
 
-export default function NxHome() {
+function NxHome() {
   const { user, isLoading } = usePiAuth();
   const me = useMe(); // server-resolved Pi username (Pi Browser hides tec_user from client JS — C-123 §3)
   const { t } = useTranslation();
@@ -187,4 +189,11 @@ export default function NxHome() {
       <BottomNav active={tab} onSelect={setTab} />
     </main>
   );
+}
+
+// The door: a sign-in button before any screen when there is no session
+// (SignInGate — C-123 §10; owner, 2026-10-06). A visit from the Hub arrives
+// signed in (§12) and goes straight through.
+export default function NxHomeGated() {
+  return <SignInGate><NxHome /></SignInGate>;
 }
