@@ -88,7 +88,7 @@ function NxHome() {
 
   return (
     <main style={{ minHeight: '100vh', background: TEC_COLORS.bg, color: TEC_COLORS.text, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-      <div style={{ maxWidth: 760, margin: '0 auto', padding: '32px 22px calc(96px + env(safe-area-inset-bottom))' }}>
+      <div style={{ maxWidth: 760, margin: '0 auto', padding: '32px 22px calc(96px + max(env(safe-area-inset-bottom), var(--tec-safe-bottom-fallback, 0px)))' }}>
         <header>
           <div style={{ fontSize: 12, letterSpacing: 1, color: TEC_COLORS.subtext, textTransform: 'uppercase' }}>{t.nx.brand}</div>
           <h1 style={{ fontSize: 26, fontWeight: 900, color: TEC_COLORS.gold, margin: '6px 0 0' }}>{title}</h1>
