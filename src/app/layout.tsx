@@ -4,6 +4,7 @@ import { RefApply } from '@/components/referral/RefApply';
 import { LocaleProvider } from '@/lib/i18n';
 import { HUB_HOSTS } from '@/lib/pi-network';
 import type { Metadata } from 'next';
+import { APP_META } from '@/lib/app-meta';
 import '@/styles/tec-design-tokens.css';
 import { ArrivalReport } from '@/components/pioneer/ArrivalReport';
 import { QuestReturn } from '@/components/pioneer/QuestReturn';
@@ -12,6 +13,9 @@ import { SAFE_BOTTOM_BOOT_SCRIPT } from '@/lib/safe-bottom';
 export const metadata: Metadata = {
   title:       'TEC NX — Opportunity Exchange',
   description: 'The opportunity exchange for the Pi economy: jobs, partnerships, grants, hackathons, investments, and co-founders.',
+  // The share card (Open Graph) and the installable manifest read lib/app-meta (E11).
+  openGraph:   { title: APP_META.name, description: APP_META.description, siteName: APP_META.name, type: 'website' },
+  twitter:     { card: 'summary', title: APP_META.name, description: APP_META.description },
 };
 
 export default function RootLayout({
