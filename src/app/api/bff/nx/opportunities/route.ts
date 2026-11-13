@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { KINDS, type Kind } from '@/lib/nx/opportunities';
 import { opportunityFromBackend, postOpportunity, resolveProStatus, setFeaturedForOwner } from '@/lib/nx/server';
 import { isE2eMode, e2eStub } from '@/lib/server/e2e-mode';
+import { gatewayFetch } from '@/lib/gateway-fetch';
 
 // Identity is derived from the `tec_user` session cookie server-side — NEVER the body (P6).
 function ownerFromSession(req: NextRequest): string | null {
@@ -41,7 +42,7 @@ export async function GET(req: NextRequest) {
       const qs = new URLSearchParams();
       if (q.trim())        qs.set('q', q.trim());
       if (kind !== 'all')  qs.set('kind', kind);
-      const res = await fetch(`${GW}/api/identity/nx/search?${qs.toString()}`, {
+      const res = await gatewayFetch(`${GW}/api/identity/nx/search?${qs.toString()}`, {
         headers: gwHeaders(), cache: 'no-store',
       });
       if (res.ok) {
