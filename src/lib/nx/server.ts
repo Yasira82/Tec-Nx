@@ -1,5 +1,6 @@
 import { type Kind, type Opportunity } from './opportunities';
 import { APP_SOURCE } from '@/lib/app-source';
+import { gatewayFetch } from '@/lib/gateway-fetch';
 
 // Server-only NX backend access (C-112, repurposed by ADR-010). Calls the real NX
 // opportunity module (identity-service) via the gateway with the inter-service key,
@@ -39,7 +40,7 @@ export function opportunityFromBackend(o: Record<string, unknown>): Opportunity 
 export async function resolveProStatus(token: string | null): Promise<boolean> {
   if (!GW || !token) return false;
   try {
-    const res = await fetch(`${GW}/api/commerce/subscriptions/status?app=${encodeURIComponent(APP_SOURCE)}`, {
+    const res = await gatewayFetch(`${GW}/api/commerce/subscriptions/status?app=${encodeURIComponent(APP_SOURCE)}`, {
       headers: { ...gwHeaders(), Authorization: `Bearer ${token}` }, cache: 'no-store',
     });
     if (!res.ok) return false;
@@ -69,7 +70,7 @@ export async function postOpportunity(
   if (!owner) return { ok: false, status: 401, error: 'Sign in to post an opportunity.' };
   if (!GW)    return { ok: false, status: 503, error: 'NX is unavailable right now.' };
   try {
-    const res = await fetch(`${GW}/api/identity/nx/opportunity`, {
+    const res = await gatewayFetch(`${GW}/api/identity/nx/opportunity`, {
       method: 'POST', headers: gwHeaders(), body: JSON.stringify({ owner, ...input }), cache: 'no-store',
     });
     const json = (await res.json().catch(() => ({}))) as Record<string, unknown>;
@@ -88,7 +89,7 @@ export async function postOpportunity(
 export async function resolveMine(owner: string | null): Promise<Opportunity[]> {
   if (!GW || !owner) return [];
   try {
-    const res = await fetch(`${GW}/api/identity/nx/mine/${encodeURIComponent(owner)}`, { headers: gwHeaders(), cache: 'no-store' });
+    const res = await gatewayFetch(`${GW}/api/identity/nx/mine/${encodeURIComponent(owner)}`, { headers: gwHeaders(), cache: 'no-store' });
     if (!res.ok) return [];
     const rows = (await res.json().catch(() => ({})))?.data?.results;
     return Array.isArray(rows) ? rows.map((o) => opportunityFromBackend(o as Record<string, unknown>)) : [];
@@ -100,7 +101,7 @@ export async function resolveMine(owner: string | null): Promise<Opportunity[]> 
 export async function setFeaturedForOwner(owner: string | null, on: boolean): Promise<boolean> {
   if (!GW || !owner) return false;
   try {
-    const res = await fetch(`${GW}/api/identity/nx/featured`, {
+    const res = await gatewayFetch(`${GW}/api/identity/nx/featured`, {
       method: 'PATCH', headers: gwHeaders(), body: JSON.stringify({ owner, featured: on }), cache: 'no-store',
     });
     return res.ok;
@@ -118,7 +119,7 @@ export interface ResolvedOpportunity {
 export async function resolveOpportunity(id: string): Promise<ResolvedOpportunity> {
   if (GW) {
     try {
-      const res = await fetch(`${GW}/api/identity/nx/opportunity/${encodeURIComponent(id)}`, {
+      const res = await gatewayFetch(`${GW}/api/identity/nx/opportunity/${encodeURIComponent(id)}`, {
         headers: gwHeaders(), cache: 'no-store',
       });
       if (res.ok) {
