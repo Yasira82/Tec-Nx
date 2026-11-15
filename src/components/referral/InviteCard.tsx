@@ -62,12 +62,12 @@ export function InviteCard() {
             Share your link — you both earn when a friend joins TEC through it.
           </p>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-            <code style={{ flex: 1, minWidth: 200, fontSize: 12, color: TEC_COLORS.gold, background: '#00000030', border: `1px solid ${TEC_COLORS.gold}22`, borderRadius: 8, padding: '9px 12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <code style={{ flex: 1, minWidth: 200, fontSize: 12, color: TEC_COLORS.gold, background: 'var(--tec-surface-2)', border: `1px solid ${TEC_COLORS.gold}22`, borderRadius: 8, padding: '9px 12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {link}
             </code>
             <button
               onClick={copy}
-              style={{ fontSize: 13, fontWeight: 800, color: '#0a0800', background: `linear-gradient(135deg, ${TEC_COLORS.gold}, ${TEC_COLORS.goldDark})`, border: 'none', borderRadius: 8, padding: '9px 16px', cursor: 'pointer', whiteSpace: 'nowrap' }}
+              style={{ fontSize: 13, fontWeight: 800, color: 'var(--tec-bg)', background: `linear-gradient(135deg, ${TEC_COLORS.gold}, ${TEC_COLORS.goldDark})`, border: 'none', borderRadius: 8, padding: '9px 16px', cursor: 'pointer', whiteSpace: 'nowrap' }}
             >
               {copied ? '✓ Copied' : 'Copy link'}
             </button>
